@@ -1,8 +1,10 @@
 package com.github.artyomskuratovich.errorfreetext.service.impl.yandex;
 
+import com.github.artyomskuratovich.errorfreetext.config.RestClientConfig;
 import com.github.artyomskuratovich.errorfreetext.model.Language;
 import com.github.artyomskuratovich.errorfreetext.service.TextCorrectionClient;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -15,10 +17,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class YandexSpellerClient implements TextCorrectionClient {
-    private static final String API_URL = "https://speller.yandex.net/services/spellservice.json";
-
-    private final TextProcessor textProcessor;
+    @Qualifier(RestClientConfig.YANDEX_SPELLER_REST_CLIENT_BEAN)
     private final RestClient restClient;
+    private final TextProcessor textProcessor;
 
     @Override
     public String correct(String text, Language language) {
@@ -32,7 +33,7 @@ public class YandexSpellerClient implements TextCorrectionClient {
         body.add("options", String.valueOf(textData.getOptions()));
 
         List<List<SpellResult>> response = restClient.post()
-                .uri(API_URL)
+                .uri("/checkTexts")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .body(body)
                 .retrieve()
