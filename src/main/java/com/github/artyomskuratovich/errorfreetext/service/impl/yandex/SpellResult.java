@@ -8,11 +8,11 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 class SpellResult {
-    int code;
-    int pos;
-    int row;
-    int col;
-    int len;
-    String word;
-    List<String> s;
+    private int code;
+    private int pos;
+    private int row;
+    private int col;
+    private int len;
+    private String word;
+    private List<String> s;
 }

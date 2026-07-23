@@ -8,6 +8,6 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 class TextData {
-    List<String> blocks;
-    int options;
+    private List<String> blocks;
+    private int options;
 }

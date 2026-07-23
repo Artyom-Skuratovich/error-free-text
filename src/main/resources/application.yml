@@ -1,3 +1,32 @@
+app:
+  scheduler:
+    fixed-delay: 2000
+    batch_size: 10
+
+  client:
+    yandex-speller:
+      connect-timeout: 3000
+      read-timeout: 10000
+
 spring:
   jackson:
     default-property-inclusion: non_null
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+      properties:
+        hibernate:
+          format_sql: true
+          dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+
+  sql:
+    init:
+      mode: always
+
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/error_free_text
+    username: postgres
+    password: 12345

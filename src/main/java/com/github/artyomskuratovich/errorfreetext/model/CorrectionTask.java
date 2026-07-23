@@ -12,6 +12,8 @@ public class CorrectionTask {
 
     private String text;
 
+    private String errorMessage;
+
     private Language language;
 
     private TaskStatus status;
