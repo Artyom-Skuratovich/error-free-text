@@ -27,6 +27,8 @@ public class CorrectionTaskScheduler {
 
     @Scheduled(fixedDelayString = "${app.scheduler.fixed-delay:2000}")
     public void processPendingTasks() {
+        log.debug("Scheduler is fetching tasks with status: {}", TaskStatus.CREATED.name());
+
         Pageable limit = PageRequest.of(0, batchSize);
         List<CorrectionTask> tasks = repository.findByStatus(TaskStatus.CREATED, limit);
 
@@ -34,11 +36,26 @@ public class CorrectionTaskScheduler {
             return;
         }
 
+        log.info("Found {} pending tasks to process in this batch", tasks.size());
+
         for (CorrectionTask task : tasks) {
             try {
+                log.info(
+                        "Starting text correction for task ID: {}, language: {}, text length: {}",
+                        task.getId(),
+                        task.getLanguage().name(),
+                        task.getText().length()
+                );
+
                 processor.startProcessing(task);
                 String correctedText = client.correct(task.getText(), task.getLanguage());
                 processor.complete(task, correctedText);
+
+                log.info(
+                        "Task ID: {} was successfully processed and marked as {}",
+                        task.getId(),
+                        TaskStatus.COMPLETED.name()
+                );
             } catch (Exception e) {
                 log.error("Failed to process task ID: {}", task.getId(), e);
                 processor.fail(task, e.getMessage());
