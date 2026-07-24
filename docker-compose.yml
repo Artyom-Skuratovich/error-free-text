@@ -1,0 +1,32 @@
+services:
+  postgres-db:
+    image: postgres:16-alpine
+    container_name: error_correction_text_db
+    environment:
+      POSTGRES_DB: error_free_text
+      POSTGRES_USER: postgres_user
+      POSTGRES_PASSWORD: "12345"
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5430:5432"
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+
+  app-service:
+    build: .
+    container_name: error_correction_text_app
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:5432/error_free_text
+      SPRING_DATASOURCE_USERNAME: postgres_user
+      SPRING_DATASOURCE_PASSWORD: "12345"
+    depends_on:
+      postgres-db:
+        condition: service_healthy
