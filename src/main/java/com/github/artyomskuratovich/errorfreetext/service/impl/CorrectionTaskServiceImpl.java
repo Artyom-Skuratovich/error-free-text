@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -32,9 +34,9 @@ public class CorrectionTaskServiceImpl implements CorrectionTaskService {
 
     @Override
     @Transactional(readOnly = true)
-    public CorrectionResponseDto getDetails(Long id) {
+    public CorrectionResponseDto getDetails(UUID id) {
         return repository.findById(id)
                 .map(mapper::toResponseDto)
-                .orElseThrow(() -> new EntityNotFoundException("Task with ID " + id + " not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Task with ID: " + id + " not found"));
     }
 }

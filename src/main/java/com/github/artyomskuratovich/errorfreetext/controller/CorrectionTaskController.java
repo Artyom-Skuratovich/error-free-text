@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/tasks")
 @RequiredArgsConstructor
@@ -23,7 +25,7 @@ public class CorrectionTaskController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public CorrectionResponseDto getTaskDetails(@PathVariable Long id) {
+    public CorrectionResponseDto getTaskDetails(@PathVariable UUID id) {
         return service.getDetails(id);
     }
 }

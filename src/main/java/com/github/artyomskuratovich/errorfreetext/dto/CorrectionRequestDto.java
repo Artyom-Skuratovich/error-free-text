@@ -12,13 +12,13 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class CorrectionRequestDto {
-    @Size(min = 3, message = "Текст должен содержать минимум 3 символа")
+    @Size(min = 3, message = "Text must contain at least 3 characters")
     @Pattern(
             regexp = "^[^\\p{L}]*\\p{L}.*$",
-            message = "Текст не может содержать только спецсимволы и цифры"
+            message = "Text cannot consist only of special characters and numbers"
     )
     private String text;
 
-    @NotNull(message = "Необходимо указать язык текста")
+    @NotNull(message = "Text language must be specified")
     private Language language;
 }

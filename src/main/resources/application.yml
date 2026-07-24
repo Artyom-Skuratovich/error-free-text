@@ -5,8 +5,8 @@ app:
 
   client:
     yandex-speller:
-      connect-timeout: 3000
-      read-timeout: 10000
+      connect-timeout: 5000
+      read-timeout: 30000
 
 spring:
   jackson:
@@ -14,7 +14,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: validate
       properties:
         hibernate:
           format_sql: true

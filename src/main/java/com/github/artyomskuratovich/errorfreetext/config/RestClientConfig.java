@@ -20,8 +20,8 @@ public class RestClientConfig {
     @Bean(YANDEX_SPELLER_REST_CLIENT_BEAN)
     public RestClient yandexSpellerRestClient(
             RestClient.Builder builder,
-            @Value("$app.client.yandex-speller.connect-timeout:3000") long connectTimeout,
-            @Value("$app.client.yandex-speller.read-timeout:10000") long readTimeout
+            @Value("${app.client.yandex-speller.connect-timeout:3000}") long connectTimeout,
+            @Value("${app.client.yandex-speller.read-timeout:10000}") long readTimeout
     ) {
         var settings = ClientHttpRequestFactorySettings.defaults()
                 .withConnectTimeout(Duration.ofMillis(connectTimeout))
