@@ -89,11 +89,19 @@ public class GlobalExceptionHandler {
             String message,
             HttpServletRequest request
     ) {
+	String matchedPattern = (String) request.getAttribute(
+            org.springframework.web.servlet.HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE
+    	);
+
+        String cleanPath = matchedPattern != null 
+            ? matchedPattern.replace("/{id}", "") 
+            : request.getRequestURI();
+	
         ErrorResponseDto responseBody = ErrorResponseDto.builder()
                 .errorMessage(message)
                 .errorCode(errorCode.getCode())
                 .timestamp(LocalDateTime.now())
-                .path(request.getRequestURI())
+                .path(cleanPath)
                 .build();
 
         return ResponseEntity.status(errorCode.getHttpStatus()).body(responseBody);
