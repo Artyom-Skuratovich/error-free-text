@@ -4,7 +4,7 @@ WORKDIR /app
 COPY gradlew build.gradle settings.gradle /app/
 COPY gradle ./gradle
 
-RUN chmod +x gradlew
+RUN sed -i 's/\r$//' gradlew && chmod +x gradlew
 
 RUN ./gradlew dependencies --no-daemon
 
