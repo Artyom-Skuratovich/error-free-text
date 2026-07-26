@@ -1,0 +1,235 @@
+{
+  "info": {
+    "_postman_id": "67c347b4-db3c-4910-8b5c-63cd44f64571",
+    "name": "Error Free Text",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "25992882"
+  },
+  "item": [
+    {
+      "name": "Enqueue Task - Success",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 201) {\r",
+              "    let responseData = pm.response.json();\r",
+              "\r",
+              "    if (responseData.taskId) {\r",
+              "        pm.collectionVariables.set(\"id\", responseData.taskId);\r",
+              "    }\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "packages": {},
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"text\": \"Hallo, my deare word! This is a test string.\",\r\n    \"language\": \"EN\" \r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/tasks",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "tasks"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Enqueue Task - Validation Error (400)",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"text\": \"12345!!!\",\r\n  \"language\": \"RU\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/tasks",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "tasks"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Task or Get Last Created",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "let currentId = pm.collectionVariables.get(\"id\");\r",
+              "\r",
+              "if (!currentId) {\r",
+              "    const taskData = {\r",
+              "        \"text\": \"Привет! Эта зопрас на испровление 111 текста\",\r",
+              "        \"language\": \"RU\"\r",
+              "    };\r",
+              "\r",
+              "    const request = {\r",
+              "        url: \"http://localhost:8080/tasks\",\r",
+              "        method: \"POST\",\r",
+              "        header: { \"Content-Type\": \"application/json\" },\r",
+              "        body: {\r",
+              "            mode: \"raw\",\r",
+              "            raw: JSON.stringify(taskData)\r",
+              "        }\r",
+              "    };\r",
+              "\r",
+              "    pm.sendRequest(request, function (err, response) {\r",
+              "        if (err) {\r",
+              "            console.error(\"Ошибка при создании задачи:\", err);\r",
+              "            return;\r",
+              "        }\r",
+              "\r",
+              "        if (response.code === 201) {\r",
+              "            let responseData = response.json();\r",
+              "            pm.collectionVariables.set(\"id\", responseData.taskId);\r",
+              "        } else {\r",
+              "            console.error(\"Сервер вернул ошибку при создании:\", response.code, response.text());\r",
+              "        }\r",
+              "    });\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 201) {\r",
+              "    let responseData = pm.response.json();\r",
+              "\r",
+              "    if (responseData.taskId) {\r",
+              "        pm.collectionVariables.set(\"id\", responseData.taskId);\r",
+              "    }\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/tasks/{{id}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "tasks",
+            "{{id}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Task - Not Found (404)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/tasks/00000000-0000-0000-0000-000000000000",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "tasks",
+            "00000000-0000-0000-0000-000000000000"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "id",
+      "value": ""
+    }
+  ]
+}
