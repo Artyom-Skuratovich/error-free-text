@@ -10,6 +10,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.HandlerMapping;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -89,14 +90,12 @@ public class GlobalExceptionHandler {
             String message,
             HttpServletRequest request
     ) {
-	String matchedPattern = (String) request.getAttribute(
-            org.springframework.web.servlet.HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE
-    	);
+        String matchedPattern = (String) request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
 
-        String cleanPath = matchedPattern != null 
-            ? matchedPattern.replace("/{id}", "") 
-            : request.getRequestURI();
-	
+        String cleanPath = matchedPattern != null
+                ? matchedPattern.replace("/{id}", "")
+                : request.getRequestURI();
+
         ErrorResponseDto responseBody = ErrorResponseDto.builder()
                 .errorMessage(message)
                 .errorCode(errorCode.getCode())
